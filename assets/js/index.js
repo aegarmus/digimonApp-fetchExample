@@ -1,6 +1,9 @@
 
 const URL_BASE = "https://digimon-api.com/api/v1/";
 
+/* let digimonCardContainer = document.getElementsByClassName('wrapper') */
+
+let digimonCardContainer = document.querySelector(".wrapper");
 
 //1. Traer los datos de la API!
 const getAllDigimon = async() => {
@@ -42,9 +45,7 @@ const createDigimonCard = async() => {
             return htmlCode //Return del ForEach
         })
 
-
         return htmlCode; //Return de mi función grande
-
 
     } catch (error) {
         console.log(error)
@@ -56,8 +57,14 @@ const createDigimonCard = async() => {
 //3. Imprimir tarjetas en el body
 
 const printDigimonCard = async() => {
-    const digimonCollectionCards = await createDigimonCard()
-    console.log(digimonCollectionCards)
+    try {
+        const digimonCollectionCards = await createDigimonCard()
+    
+        digimonCardContainer.innerHTML = digimonCollectionCards
+        
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 printDigimonCard()
