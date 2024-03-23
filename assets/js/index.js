@@ -178,7 +178,7 @@ const printDigimonCard = async() => {
 }
 
 //6. Imprimir la tarjeta del Digimon
-const printOneDigimonCard = async(digimon) => {
+const printOneDigimonCard = async(digimon, digimonSelected) => {
     try {
 
         const getDigimon = await getOneDigimon(digimon)
