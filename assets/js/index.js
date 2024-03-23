@@ -4,6 +4,10 @@ const URL_BASE = "https://digimon-api.com/api/v1/";
 /* let digimonCardContainer = document.getElementsByClassName('wrapper') */
 
 let digimonCardContainer = document.querySelector(".wrapper");
+let digimonSelected = document.querySelector('.digimon-selected')
+
+let inputDigimon = document.querySelector(".search-digimon");
+let searchButton = document.querySelector(".search-button");
 
 //1. Traer los datos de la API!
 const getAllDigimon = async() => {
@@ -15,6 +19,22 @@ const getAllDigimon = async() => {
 
     } catch (error) {
         console.log('No me salio :c')
+    }
+}
+
+
+//4. Traer datos de UN SOLO DIGIMON!!
+
+
+const getOneDigimon = async(digimon) => {
+    try {
+        const response = await fetch(`${URL_BASE}digimon/${digimon}`)
+        const data = await response.json()
+
+        return(data)
+
+    } catch (error) {
+        console.log("No me salio :c");
     }
 }
 
@@ -52,6 +72,49 @@ const createDigimonCard = async() => {
     }
 }
 
+//5. Crear tarjeta para un solo Digimon
+
+const createOneDigimonCard = async(digimon) => {
+    try {
+        const digimonData = await getOneDigimon(digimon)
+    
+        let htmlCode = `
+            <div class = "one-digimon-card">
+                <div class = "one-digimon-header">
+                    <div class="one-digimon-img">
+                        <img src="${digimonData.images[0].href}" alt="${digimonData.name}">
+                    </div>
+                    <h2 class = "one-digimon-name">${digimonData.name}</h2>
+                    <p class="one-digimon-id> ID: ${digimonData.id} </p>
+                    <div class= "one-digimon-fields">
+                        <h3>Fields</h3>
+                        <div class="field-container">
+                            <span class="field"><img src="${digimonData.fields[0].image}" alt="${digimonData.fields[0].field}"></span>
+                            <span class="field"><img src="${digimonData.fields[1].image}" alt="${digimonData.fields[1].field}"></span>
+                            <span class="field"><img src="${digimonData.fields[2].image}" alt="${digimonData.fields[2].field}"></span>
+                        </div>
+                        <div class="one-digimon-body">
+                            <p class="digimon-info"> Level: <span class="digimon-text"> ${digimonData.levels[0].level} </span></p>
+                            <p class="digimon-info"> attributes: <span class="digimon-text"> ${digimonData.attributes[0].attribute} </span></p>
+                            <p class="digimon-info"> Level: <span class="digimon-text"> ${digimonData.types[0].type} </span></p>
+
+                            <h3>Description</h3>
+                            <p class="digimon-description">${digimonData.descriptions[1].description}</p>
+                        </div>
+
+                        <div>
+                            <canvas id="myChart">
+
+                            </canvas>
+                        </div>
+        `                   
+
+        return htmlCode
+        
+    } catch (error) {
+        
+    }
+}
 
 
 //3. Imprimir tarjetas en el body
@@ -67,8 +130,26 @@ const printDigimonCard = async() => {
     }
 }
 
+//6. Imprimir la tarjeta del Digimon
+const printOneDigimonCard = async(digimon) => {
+    try {
+        const digimonCard = await createOneDigimonCard(digimon)
+        console.log(digimonCard)
+        digimonSelected.innerHTML = digimonCard
+    } catch (error) {
+        console.log('Algo malio sal!')
+    }
+}
+
 printDigimonCard()
 
+
+
+searchButton.addEventListener('click', async() => {
+    let digimon = inputDigimon.value
+
+    await printOneDigimonCard(digimon)
+})
 
 /* async function printDigimonCard2 () {
     const digimonCollectionCards = await createDigimonCard()
